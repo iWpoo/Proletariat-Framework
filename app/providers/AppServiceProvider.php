@@ -2,11 +2,12 @@
 
 namespace App\Providers;
 
+use Core\ProviderInterface;
 use DI\ContainerBuilder;
 use App\Services\MyService;
 use App\Services\ServiceInterface;
 
-class AppServiceProvider
+class AppServiceProvider implements ProviderInterface
 {
     public static function register(ContainerBuilder $containerBuilder)
     {        

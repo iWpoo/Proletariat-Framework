@@ -2,25 +2,21 @@
 
 namespace Core;
 
-use PDO;
+use Illuminate\Database\Capsule\Manager as Capsule;
 
 class Database {
-    protected static $instance = null;
-    protected $pdo;
-
-    protected function __construct() {
-        $this->pdo = new PDO('mysql:host=' . DB_HOST . ';dbname=' . DB_NAME . ';charset=utf8', DB_USER, DB_PASS);
+    public function __construct()
+    {
+        $this->init();
     }
 
-    public static function getInstance() {
-        if (self::$instance === null) {
-            self::$instance = new self();
-        }
+    private function init()
+    {
+        $capsule = new Capsule;
 
-        return self::$instance;
-    }
+        $capsule->addConnection(require($_SERVER['DOCUMENT_ROOT'] . '/config/database.php'));
 
-    public function getPdo() {
-        return $this->pdo;
+        $capsule->setAsGlobal();
+        $capsule->bootEloquent();
     }
 }

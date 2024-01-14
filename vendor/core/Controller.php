@@ -2,27 +2,36 @@
 
 namespace Core;
 
-abstract class Controller
+use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
+use Twig\TwigFunction;
+
+class Controller
 {	
-	// Render the twig pages	
+    protected $twig;
+
+    /* Initializing the Twig  */
+	protected function initTwig()
+    {
+        $loader = new FilesystemLoader($_SERVER['DOCUMENT_ROOT'] . "/views/");
+        $this->twig = new Environment($loader);
+        $this->initTwigFunctions();
+    }
+
+	/* Render the twig page */
 	protected function render($view, $data = [])
 	{
-		$viewPath = $_SERVER['DOCUMENT_ROOT'] . "/views/";
-		$loader = new \Twig\Loader\FilesystemLoader($viewPath);
-		$twig = new \Twig\Environment($loader);
-
-		$path = new \Core\Path();
-        $twig->addFunction(new \Twig\TwigFunction('route', [$path, 'route']));
-
-		return $twig->render($view, $data);
+		if (!$this->twig) {
+            $this->initTwig();
+        }
+		
+		return $this->twig->render($view . '.twig', $data);
 	}
-    
-	// JSON
-	protected function response($data)
+
+	private function initTwigFunctions()
 	{
-		$json = json_encode($data);
-		header('Content-Type: application/json');
-		return $json;
+		$path = new \Core\Path();
+        $this->twig->addFunction(new TwigFunction('route', [$path, 'route']));
 	}
     
 	// Add post element with xss defence
@@ -50,14 +59,22 @@ abstract class Controller
 		return $filename;
 	}
     
-	// Redirect
-	protected function redirect($to)
-	{
-		header("Location: $to");
-		return $this;
-	}
+	protected function redirect($to = null)
+    {
+        if ($to !== null) {
+            header("Location: $to");
+            exit();
+        }
 
-	// Redirect to previous page
+        return $this;
+    }
+
+    protected function route($name)
+    {
+        $path = (new \Core\Path)->route($name);
+        $this->redirect($path);
+    }
+
 	protected function back()
 	{	
 		$this->redirect($_SERVER['HTTP_REFERER']);
@@ -74,18 +91,4 @@ abstract class Controller
 		}
 		return $token;
 	}
-
-	// Cut part of url string
-    public function cutUrlString($string)
-    {
-        if (isset($_SERVER['QUERY_STRING'])) {
-            $query = $_SERVER['QUERY_STRING'];
-            if (strpos($query, $string) !== false) {
-                $query = preg_replace("/$string.*/", '', $query);
-                $url = strtok($_SERVER['REQUEST_URI'], '?') . '?' . $query;
-                return $url;
-            }
-            return '?' . $_SERVER['QUERY_STRING'];
-        }  
-    }
 }

@@ -2,39 +2,30 @@
 
 namespace Core;
 	
-class Router	
+class Router
 {
-	public function getTrack($routes, $uri, $method)
-    {
-        foreach ($routes as $route) {
-            if ($route->getMethod() == $method) {
-                $pattern = $this->createPattern($route->path);
+    private static $routes = [];
 
-                if (preg_match($pattern, $uri, $params)) {
-                    $params = $this->clearParams($params);
-                    return new Track($route->controller, $route->action, $params);
-                }
-            }
+    public static function addRoute(Route $route)
+    {
+        $key = $route->getMethod() . '|' . $route->getPath();
+        self::$routes[$key] = $route;
+    }
+
+    public function getTrack($uri, $method)
+    {
+        $key = $method . '|' . $uri;
+
+        if (isset(self::$routes[$key])) {
+            $route = self::$routes[$key];
+            return new Track($route->getController(), $route->getAction());
         }
 
         return new Track('error', 'notFound');
     }
-		
-	private function createPattern($path)
-	{
-		return '#^' . preg_replace('#/:([^/]+)#', '/(?<$1>[^/]+)', $path) . '/?$#';
-	}
-	
-	private function clearParams($params)
-	{
-		$result = [];
-		
-		foreach ($params as $key => $param) {
-			if (!is_int($key)) {
-				$result[$key] = $param;
-			}
-		}
-			
-		return $result;
-	}	
+
+    public function getRoutes()
+    {
+        return self::$routes;
+    }
 }

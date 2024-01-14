@@ -8,16 +8,18 @@ session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 'on');
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/database/connection.php';
+// Initialize the database
+$database = new \Core\Database();
 
+// Initializing the Dependency Container
 $container = AppContainer::buildContainer();
 
+// Processing routes
 $router = $container->get('Router');
-$dispatcher = $container->get('Dispatcher');
-
-$routes = require $_SERVER['DOCUMENT_ROOT'] . '/routes/routes.php';
-
-$track = $router->getTrack($routes, $_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD']);
+require $_SERVER['DOCUMENT_ROOT'] . '/routes/routes.php';
+$dispatcher = $container->get('Dispatcher');    
+$track = $router->getTrack($_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD']);
 $page = $dispatcher->getPage($track);
 
+// Page output
 echo $page;

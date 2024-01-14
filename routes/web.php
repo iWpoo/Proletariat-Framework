@@ -1,8 +1,7 @@
 <?php 
 
+use Core\Router;
 use Core\Route;
 
-$routes = [
-    Route::get('/', 'index', 'index')->name('index'),
-    Route::post('/store', 'index', 'store')->name('store'),
-];
+Router::addRoute(Route::get('/', 'index', 'index')->name('index'));
+Router::addRoute(Route::post('/store', 'index', 'store')->name('store'));

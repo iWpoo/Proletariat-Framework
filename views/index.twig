@@ -5,8 +5,11 @@
         <title>Hello</title>
     </head>
     <body>
+        {% for user in users %}
+            {{ user.username }} <br>
+        {% endfor %}
         <form method="post" action="{{ route('store') }}">
             <button type="submit">Click</button>
         </form>
-    </body> 
+    </body>
 </html>

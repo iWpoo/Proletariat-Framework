@@ -3,30 +3,20 @@
 namespace App\Controllers;
 
 use Core\Controller;
-use App\Models\Users;
+use App\Models\User;
 use App\Services\ServiceInterface;
 
 class IndexController extends Controller
 {
-    private $service;
-
-    public function __construct(ServiceInterface $service)
-    {
-        $this->service = $service;
-    }
-
 	public function index()
-    {
-        return $this->service->doSomething();
+    {        
+        $users = User::all();
+        
+        return $this->render('index', compact('users'));
     }
 
     public function store()
     {
-        $user = new Users();
-        $user->create([
-            'username' => 'admin',
-            'password' => 'admin',
-        ]);
         return $this->back();
     }
 }
