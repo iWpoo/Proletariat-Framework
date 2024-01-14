@@ -28,11 +28,11 @@ class Dispatcher
                     return $result;
                 }
             } else {
-                echo "Метод <b>{$track->action}</b> не найден в классе $fullName."; 
+                throw new \RuntimeException("Action <b>{$track->action}</b> not found in class $fullName: ");
                 die();
             }
         } catch (\Exception $error) {
-            echo $error->getMessage(); 
+            throw new \Exception($error->getMessage());
             die();
         }
     }

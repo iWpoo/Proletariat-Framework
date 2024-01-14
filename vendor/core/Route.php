@@ -39,36 +39,41 @@ class Route
         return new self($path, $controller, $action, 'DELETE');
     }
 
-    public function name($name)
+    public function name($name): self
     {
         $this->name = $name;
         self::$routes[$name] = $this;
         return $this;
     }
 
-    public static function getRoutes()
+    public static function getRoutes(): array
     {
         return self::$routes;
     }
 
-    public function getMethod()
+    public function getMethod(): string
     {
         return $this->method;
     }
 
-    public function getPath()
+    public function getPath(): string
     {
         return $this->path;
     }
 
-    public function getController()
+    public function getController(): string
     {
         return $this->controller;
     }
 
-    public function getAction()
+    public function getAction(): string
     {
         return $this->action;
+    }
+
+    public static function route(string $name): string
+    {
+        return self::getRoutes()[$name]->path ?? null;
     }
 
     public function __get($property)

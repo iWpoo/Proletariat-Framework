@@ -9,7 +9,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', 'on');
 
 // Initialize the database
-$database = new \Core\Database();
+$database = new \Core\Database(require($_SERVER['DOCUMENT_ROOT'] . '/config/database.php'));
 
 // Initializing the Dependency Container
 $container = AppContainer::buildContainer();

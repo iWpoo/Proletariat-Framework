@@ -17,6 +17,6 @@ class IndexController extends Controller
 
     public function store()
     {
-        return $this->back();
+        return $this->redirect()->route('index');
     }
 }

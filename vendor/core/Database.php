@@ -4,19 +4,24 @@ namespace Core;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
 
-class Database {
-    public function __construct()
+class Database
+{
+    public function __construct(array $config)
     {
-        $this->init();
+        $this->init($config);
     }
 
-    private function init()
+    private function init(array $config)
     {
-        $capsule = new Capsule;
+        try {
+            $capsule = new Capsule;
 
-        $capsule->addConnection(require($_SERVER['DOCUMENT_ROOT'] . '/config/database.php'));
+            $capsule->addConnection($config);
 
-        $capsule->setAsGlobal();
-        $capsule->bootEloquent();
+            $capsule->setAsGlobal();
+            $capsule->bootEloquent();
+        } catch (\Exception $e) {
+            throw new \Exception('Database connection error: ' . $e->getMessage());
+        }
     }
 }
