@@ -21,7 +21,7 @@ class AppContainer
         if (file_exists($configFile)) {
             $providers = require $configFile;
 
-            foreach ($providers['dependencies'] as $provider) {
+            foreach ($providers['providers'] as $provider) {
                 if (!class_exists($provider)) {
                     throw new \RuntimeException("Provider class not found: $provider");
                 }
@@ -37,7 +37,7 @@ class AppContainer
     {
         $containerBuilder->addDefinitions([
             'Router' => static function () {
-                return new Router();
+                return new Router(require __DIR__ . '/../../routes/web.php');
             },
             'Dispatcher' => static function ($container) {
                 return new Dispatcher($container);

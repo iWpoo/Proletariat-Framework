@@ -8,7 +8,7 @@
         {% for user in users %}
             {{ user.username }} <br>
         {% endfor %}
-        <form method="post" action="{{ route('store') }}">
+        <form method="post" action="/store">
             <button type="submit">Click</button>
         </form>
     </body>

@@ -71,10 +71,10 @@ class Route
         return $this->action;
     }
 
-    public static function route(string $name): string
+    public static function route(string $name): ?string
     {
-        return self::getRoutes()[$name]->path ?? null;
-    }
+        return self::$routes[$name]->path ?? null;
+    }   
 
     public function __get($property)
     {

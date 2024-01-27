@@ -1,7 +1,9 @@
 <?php 
 
+use Core\Env;
+
 return [
-    'dependencies' => [
+    'providers' => [
         '\App\Providers\AppServiceProvider',
     ]
 ];

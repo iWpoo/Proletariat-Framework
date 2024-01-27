@@ -3,29 +3,64 @@
 namespace Core;
 	
 class Router
-{
-    private static $routes = [];
+{   
+    private array $routes;
 
-    public static function addRoute(Route $route)
+    public function __construct(array $routes)
     {
-        $key = $route->getMethod() . '|' . $route->getPath();
-        self::$routes[$key] = $route;
+        $this->initializeRoutes($routes);
     }
 
-    public function getTrack($uri, $method)
+    private function initializeRoutes(array $routes): void
+    {
+        if ($this->cacheRoute()) {
+            $cachedRoutes = Cache::get('cached_routes');
+
+            if ($cachedRoutes !== null) {
+                $this->routes = $cachedRoutes;
+                return;
+            }
+        }
+
+        $this->routes = $this->buildRoutes($routes);
+
+        if ($this->cacheRoute()) {
+            Cache::set('cached_routes', $this->routes, 86400 * 30);
+        }
+    }
+
+    private function buildRoutes(array $routes): array
+    {
+        $builtRoutes = [];
+
+        foreach ($routes as $route) {
+            $key = $route->getMethod() . '|' . $route->getPath();
+            $builtRoutes[$key] = $route;
+        }
+
+        return $builtRoutes;
+    }
+
+    public function getTrack(string $uri, string $method): Track
     {
         $key = $method . '|' . $uri;
 
-        if (isset(self::$routes[$key])) {
-            $route = self::$routes[$key];
+        if (isset($this->routes[$key])) {
+            $route = $this->routes[$key];
             return new Track($route->getController(), $route->getAction());
         }
 
-        return new Track('error', 'notFound');
+        throw new \RuntimeException("Route not found for URI: $uri, Method: $method");
     }
 
-    public function getRoutes()
+    public function getRoutes(): array
     {
-        return self::$routes;
+        return $this->routes;
+    }
+
+    private function cacheRoute(): bool
+    {
+        $cacheRoute = require $_SERVER['DOCUMENT_ROOT'] . '/config/cache.php';
+        return (bool) $cacheRoute['route'];
     }
 }
