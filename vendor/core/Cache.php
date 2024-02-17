@@ -9,10 +9,10 @@ class Cache
 
     public static function init() 
     {
-        self::$configCache = require $_SERVER['DOCUMENT_ROOT'] . '/config/cache.php';
+        self::$configCache = require __DIR__ . '/../../config/cache.php';
         
         if (self::$configCache['default'] == 'file') {
-            self::$cacheDir = $_SERVER['DOCUMENT_ROOT'] . self::$configCache['file']['path'];
+            self::$cacheDir = __DIR__ . '/../../' . self::$configCache['file']['path'];
 
             if (!is_dir(self::$cacheDir)) {
                 mkdir(self::$cacheDir, 0777, true);
@@ -20,11 +20,11 @@ class Cache
         }
     }
 
-    public static function set($key, $value, $expiration = null) 
+    public static function set($key, $value, $expiration = null, bool $hash = true) 
     {
         self::init();
         
-        $cacheFile = self::getCacheFilePath($key);
+        $cacheFile = self::getCacheFilePath($key, $hash);
 
         $expiration = isset($expiration) ? $expiration : self::$configCache['file']['expire'];
 
@@ -36,11 +36,11 @@ class Cache
         file_put_contents($cacheFile, serialize($data));
     }
 
-    public static function get($key) 
+    public static function get($key, bool $hash = true) 
     {
         self::init();
         
-        $cacheFile = self::getCacheFilePath($key);
+        $cacheFile = self::getCacheFilePath($key, $hash);
 
         if (file_exists($cacheFile)) {
             $data = unserialize(file_get_contents($cacheFile));
@@ -55,21 +55,20 @@ class Cache
         return null;
     }
 
-    public static function delete($key) 
+    public static function delete($key, bool $hash = true) 
     {
         self::init();
         
-        $cacheFile = self::getCacheFilePath($key);
+        $cacheFile = self::getCacheFilePath($key, $hash);
 
         if (file_exists($cacheFile)) {
             unlink($cacheFile);
         }
     }
 
-    private static function getCacheFilePath($key) 
+    private static function getCacheFilePath($key, bool $hash = true) 
     {
-        $key = sha1($key);
-
+        $key = $hash ? sha1($key) : $key;
         return self::$cacheDir . $key . '.cache';
     }
 }

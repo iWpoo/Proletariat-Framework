@@ -8,13 +8,13 @@ use Twig\TwigFunction;
 
 abstract class Controller
 {
-    protected $twig;
+    protected static $twig;
 
     protected function initTwig(): void
     {
-        if (!$this->twig) {
+        if (!self::$twig) {
             $loader = new FilesystemLoader($_SERVER['DOCUMENT_ROOT'] . "/views/");
-            $this->twig = new Environment($loader);
+            self::$twig = new Environment($loader);
             $this->initTwigFunctions();
         }
     }
@@ -22,12 +22,12 @@ abstract class Controller
     protected function render(string $view, array $data = []): string
     {
         $this->initTwig();
-        return $this->twig->render($view . '.twig', $data);
+        return self::$twig->render($view . '.twig', $data);
     }
 
     protected function initTwigFunctions(): void
     {
-        $this->twig->addFunction(new TwigFunction('route', ['\Core\Route', 'route']));
+        self::$twig->addFunction(new TwigFunction('route', ['\Core\Route', 'route']));
     }
 
     protected function redirect($to = null): self

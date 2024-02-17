@@ -21,7 +21,7 @@ class IndexController extends Controller
         
         // $users = \Core\Cache::get('users');
 
-        // return $this->render('index', compact('users'));
+        // return $this->render('index');
 
         return \Core\Config::get('cache.default');   
     }

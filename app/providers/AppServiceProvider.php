@@ -4,7 +4,6 @@ namespace App\Providers;
 
 use DI\ContainerBuilder;
 use App\Services\MyService;
-use App\Services\ConsoleService;
 use App\Services\ServiceInterface;
 
 class AppServiceProvider
@@ -13,7 +12,7 @@ class AppServiceProvider
     {        
         $containerBuilder->addDefinitions([
             ServiceInterface::class => function ($container) {
-                return new ConsoleService();
+                return new MyService();
             },
         ]);
     }

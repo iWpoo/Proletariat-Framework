@@ -6,16 +6,17 @@ class Env
 {
     protected static $data;
 
-    protected static function load(string $filePath = '.env'): void
+    protected static function load(string $filePath = '.env')
     {
-        if (!isset(self::$data)) {
-            $envFile = $_SERVER['DOCUMENT_ROOT'] . '/' . $filePath;
-
-            if (!file_exists($envFile)) {
-                throw new \RuntimeException('.env file not found');
-            }
-
-            self::$data = parse_ini_file($envFile);
+        $cachedEnv = self::getCacheConfig();
+        $envFile = realpath(__DIR__ . '/../../' . $filePath);
+    
+        if ($cachedEnv === null || (file_exists($envFile) && filemtime($envFile) > $cachedEnv['mtime'])) {
+            $parseIniFile = ($envFile !== false && file_exists($envFile)) ? parse_ini_file($envFile) : [];
+            self::$data = $parseIniFile;
+            self::setCacheEnv($parseIniFile);
+        } else {
+            self::$data = $cachedEnv['value'];
         }
     }
 
@@ -24,5 +25,40 @@ class Env
         self::load();
 
         return self::$data[$key] ?? $default;
+    }
+
+    private static function getCacheConfig()
+    {
+        $cacheDir = __DIR__ . '/../../storage/app/';
+        $file = $cacheDir . 'env.cache';
+
+        if (file_exists($file)) {
+            $data = unserialize(file_get_contents($file));
+
+            if ($data['expiration'] > time()) {
+                return [
+                    'mtime' => filemtime($file),
+                    'value' => $data['value']
+                ];
+            }
+        }
+
+        return null;
+    }
+
+    private static function setCacheEnv($value)
+    {
+        $cacheDir = __DIR__ . '/../../storage/app/';
+
+        if (!is_dir($cacheDir)) {
+            mkdir($cacheDir, 0777, true);
+        }
+
+        $file = $cacheDir . 'env.cache';
+        $data = [
+            'value' => $value,
+            'expiration' => time() + 86400,
+        ];
+        file_put_contents($file, serialize($data));
     }
 }
