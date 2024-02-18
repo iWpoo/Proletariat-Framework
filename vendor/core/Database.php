@@ -2,12 +2,11 @@
 
 namespace Core;
 
-use Illuminate\Database\Capsule\Manager as Capsule;
+use Core\Services\Eloquent;
 
 class Database
 {
     private static $instance;
-    private static $capsule;
 
     public static function getInstance(array $config)
     {
@@ -20,22 +19,12 @@ class Database
 
     private function __construct(array $config)
     {
-        $this->init($config);
-    }
-
-    private function init(array $config)
-    {
-        try {
-            if (!self::$capsule) {
-                self::$capsule = new Capsule;
-            }
-
-            self::$capsule->addConnection($config);
-
-            self::$capsule->setAsGlobal();
-            self::$capsule->bootEloquent();
-        } catch (\Exception $e) {
-            throw new \Exception('Database connection error: ' . $e->getMessage());
+        $orm_type = Env::get('ORM_DRIVER');
+        switch ($orm_type) {
+            case 'eloquent':
+                return Eloquent::getInstance($config);
+            default: 
+                throw new \Exception('Undefined database type: ' . $orm_type);
         }
     }
 }

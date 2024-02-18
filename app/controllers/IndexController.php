@@ -17,13 +17,13 @@ class IndexController extends Controller
 
 	public function index()
     {        
-        // $users = User::all();
+        $users = User::all();
         
-        // $users = \Core\Cache::get('users');
+        $users = \Core\Cache::get('users');
 
-        // return $this->render('index');
+        return $this->render('index');
 
-        return \Core\Config::get('cache.default');   
+        // return \Core\Config::get('cache.default');   
     }
 
     public function about()

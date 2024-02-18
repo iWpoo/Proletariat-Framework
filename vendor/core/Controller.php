@@ -2,32 +2,19 @@
 
 namespace Core;
 
-use Twig\Environment;
-use Twig\Loader\FilesystemLoader;
-use Twig\TwigFunction;
+use Core\Services\Twig;
 
 abstract class Controller
 {
-    protected static $twig;
-
-    protected function initTwig(): void
-    {
-        if (!self::$twig) {
-            $loader = new FilesystemLoader($_SERVER['DOCUMENT_ROOT'] . "/views/");
-            self::$twig = new Environment($loader);
-            $this->initTwigFunctions();
-        }
-    }
-
     protected function render(string $view, array $data = []): string
     {
-        $this->initTwig();
-        return self::$twig->render($view . '.twig', $data);
-    }
-
-    protected function initTwigFunctions(): void
-    {
-        self::$twig->addFunction(new TwigFunction('route', ['\Core\Route', 'route']));
+        $template_type = Env::get('TEMPLATE_DRIVER');
+        switch ($template_type) {
+            case 'twig':
+                return Twig::getInstance()->render($view, $data);
+            default: 
+                throw new \Exception('Undefined database type: ' . $template_type);
+        }
     }
 
     protected function redirect($to = null): self
