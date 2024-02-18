@@ -57,7 +57,7 @@ class Env
         $file = $cacheDir . 'env.cache';
         $data = [
             'value' => $value,
-            'expiration' => time() + 86400,
+            'expiration' => time() + 86400 * 30,
         ];
         file_put_contents($file, serialize($data));
     }
