@@ -1,6 +1,6 @@
 <?php 
 
-use Core\Route;
+use Proletariat\Route;
 
 return [
     Route::get('/', 'index', 'index')->name('index'),

@@ -1,6 +1,6 @@
 <?php
 
-namespace Core;
+namespace Proletariat;
 
 // Include the autoloader
 require_once __DIR__ . '/vendor/libs/autoload.php';
@@ -12,7 +12,7 @@ ini_set('display_errors', 'on');
 try {
     // Initialize the database
     $databaseConfig = require_once(__DIR__ . '/config/database.php');
-    $database = Database::getInstance($databaseConfig);
+    $database = DatabaseManager::getInstance(new \Proletariat\Services\Eloquent)->initializeDatabase($databaseConfig);
 
     // Initialize the dependency container
     $container = AppContainer::buildContainer();

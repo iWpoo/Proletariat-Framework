@@ -1,6 +1,6 @@
 <?php
 
-namespace Core;
+namespace Proletariat;
 
 use Symfony\Component\Console\Application;
 

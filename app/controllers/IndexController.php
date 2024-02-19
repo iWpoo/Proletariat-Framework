@@ -2,13 +2,13 @@
 
 namespace App\Controllers;
 
-use Core\Controller;
+use Proletariat\Controller;
 use App\Models\User;
 use App\Services\ServiceInterface;
 
 class IndexController extends Controller
 {
-    private $service;
+    private ServiceInterface $service;
 
     public function __construct(ServiceInterface $service)
     {
@@ -17,13 +17,10 @@ class IndexController extends Controller
 
 	public function index()
     {        
-        $users = User::all();
+        // $users = User::all();
+        // return $users;
+        return route('about');
         
-        $users = \Core\Cache::get('users');
-
-        return $this->render('index');
-
-        // return \Core\Config::get('cache.default');   
     }
 
     public function about()
@@ -33,6 +30,6 @@ class IndexController extends Controller
 
     public function store()
     {
-        return $this->redirect()->route('index');
+        return route('index');
     }
 }

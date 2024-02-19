@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use Core\Controller;
+use Proletariat\Controller;
 	
 class ErrorController extends Controller
 {

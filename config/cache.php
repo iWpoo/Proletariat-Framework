@@ -1,16 +1,16 @@
 <?php
 
-use Core\Env;
+use Proletariat\Env;
 
-return [
-    'default' => Env::get('CACHE_DRIVER'),
-    
+return [    
+    'driver' => Env::get('CACHE_DRIVER'),
+
     'route' => false,
     'config' => false,
 
     'file' => [
         'path' => 'storage/cache/',
-        'expire' => 3600, // default time
+        'expire' => null, // default time
 
         'config' => [
             'path' => 'storage/app/',

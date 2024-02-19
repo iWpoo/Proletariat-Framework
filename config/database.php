@@ -1,6 +1,6 @@
 <?php
 
-use Core\Env;
+use Proletariat\Env;
 
 return [
     'driver' => Env::get('DB_CONNECTION'),

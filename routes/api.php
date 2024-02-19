@@ -1,3 +1,3 @@
 <?php 
 
-use Core\Route;
+use Proletariat\Route;

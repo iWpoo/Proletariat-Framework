@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\Services;
+namespace Proletariat\Services;
 
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;

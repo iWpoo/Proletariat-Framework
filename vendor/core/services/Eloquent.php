@@ -1,41 +1,21 @@
 <?php 
 
-namespace Core\Services;
+namespace Proletariat\Services;
 
+use Proletariat\Interfaces\iDatabase;
 use Illuminate\Database\Capsule\Manager as Capsule;
 
-class Eloquent
+class Eloquent implements iDatabase
 {
-    private static $instance;
-    private static $capsule;
-
-    public static function getInstance(array $config)
-    {
-        if (!self::$instance) {
-            self::$instance = new self($config);
-        }
-
-        return self::$instance;
-    }
-
-    private function __construct(array $config)
-    {
-        $this->init($config);
-    }
-
-    private function init(array $config)
+    public function init(array $config)
     {
         try {
-            if (!self::$capsule) {
-                self::$capsule = new Capsule;
-            }
-
-            self::$capsule->addConnection($config);
-
-            self::$capsule->setAsGlobal();
-            self::$capsule->bootEloquent();
+            $capsule = new Capsule;
+            $capsule->addConnection($config);
+            $capsule->setAsGlobal();
+            $capsule->bootEloquent();
         } catch (\Exception $e) {
-            throw new \Exception('Database connection error: ' . $e->getMessage());
+            throw new \Exception('Eloquent initialization error: ' . $e->getMessage());
         }
     }
 }

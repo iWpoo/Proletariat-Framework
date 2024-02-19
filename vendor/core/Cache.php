@@ -1,74 +1,50 @@
 <?php
 
-namespace Core;
+namespace Proletariat;
+
+use Proletariat\Services\FileCache;
+use Proletariat\Services\RedisCache;
 
 class Cache 
 {
-    private static $configCache;
-    private static $cacheDir;
+    private static $cache;
 
-    public static function init() 
+    public static function init()
     {
-        self::$configCache = require __DIR__ . '/../../config/cache.php';
-        
-        if (self::$configCache['default'] == 'file') {
-            self::$cacheDir = __DIR__ . '/../../' . self::$configCache['file']['path'];
-
-            if (!is_dir(self::$cacheDir)) {
-                mkdir(self::$cacheDir, 0777, true);
-            }
+        $cacheConfig = require __DIR__ . '/../../config/cache.php';
+        switch ($cacheConfig['driver']) {
+            case 'file': 
+                self::$cache = new FileCache();
+                break;
+            case 'redis':
+                self::$cache = new RedisCache();
+                break;
+            default:
+                throw new \Exception('Undefined cache type: ' . $cacheConfig['driver']);
         }
     }
 
-    public static function set($key, $value, $expiration = null, bool $hash = true) 
+    public static function set($key, $value, $expiration = null) 
     {
         self::init();
-        
-        $cacheFile = self::getCacheFilePath($key, $hash);
-
-        $expiration = isset($expiration) ? $expiration : self::$configCache['file']['expire'];
-
-        $data = [
-            'value' => $value,
-            'expiration' => time() + $expiration,
-        ];
-
-        file_put_contents($cacheFile, serialize($data));
+        self::$cache->set($key, $value, $expiration);
     }
 
-    public static function get($key, bool $hash = true) 
+    public static function get($key) 
     {
         self::init();
-        
-        $cacheFile = self::getCacheFilePath($key, $hash);
-
-        if (file_exists($cacheFile)) {
-            $data = unserialize(file_get_contents($cacheFile));
-
-            if ($data['expiration'] > time()) {
-                return $data['value'];
-            } else {
-                unlink($cacheFile);
-            }
-        }
-
-        return null;
+        return self::$cache->get($key);
     }
 
-    public static function delete($key, bool $hash = true) 
+    public static function delete($key) 
     {
         self::init();
-        
-        $cacheFile = self::getCacheFilePath($key, $hash);
-
-        if (file_exists($cacheFile)) {
-            unlink($cacheFile);
-        }
+        self::$cache->delete($key);
     }
 
-    private static function getCacheFilePath($key, bool $hash = true) 
+    public function exists($key)
     {
-        $key = $hash ? sha1($key) : $key;
-        return self::$cacheDir . $key . '.cache';
+        self::init();
+        self::$cache->exists($key);
     }
 }
