@@ -6,10 +6,10 @@ class Env
 {
     protected static $data;
 
-    protected static function load(string $filePath = '.env')
+    protected static function load(string $filePath = '/.env')
     {
         $cachedEnv = self::getCacheConfig();
-        $envFile = realpath(__DIR__ . '/../../' . $filePath);
+        $envFile = realpath($_SERVER['DOCUMENT_ROOT'] . $filePath);
     
         if ($cachedEnv === null || (file_exists($envFile) && filemtime($envFile) > $cachedEnv['mtime'])) {
             $parseIniFile = ($envFile !== false && file_exists($envFile)) ? parse_ini_file($envFile) : [];
@@ -29,7 +29,7 @@ class Env
 
     private static function getCacheConfig()
     {
-        $cacheDir = __DIR__ . '/../../storage/app/';
+        $cacheDir = $_SERVER['DOCUMENT_ROOT'] . '/storage/app/';
         $file = $cacheDir . 'env.cache';
 
         if (file_exists($file)) {
@@ -48,7 +48,7 @@ class Env
 
     private static function setCacheEnv($value)
     {
-        $cacheDir = __DIR__ . '/../../storage/app/';
+        $cacheDir = $_SERVER['DOCUMENT_ROOT'] . '/storage/app/';
 
         if (!is_dir($cacheDir)) {
             mkdir($cacheDir, 0777, true);

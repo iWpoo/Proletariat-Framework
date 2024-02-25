@@ -17,7 +17,7 @@ class IndexController extends Controller
 
 	public function index()
     {        
-        
+        return $this->render('index', ['name' => 'Avgustin']);
     }
 
     public function about()
@@ -27,6 +27,6 @@ class IndexController extends Controller
 
     public function store()
     {
-        return redirect()->route('index');
+        return redirect()->route('about');
     }
 }

@@ -11,9 +11,9 @@ class FileCache implements ICache
 
     public function __construct()
     {
-        $this->configCache = require __DIR__ . '/../../../config/cache.php';
+        $this->configCache = require $_SERVER['DOCUMENT_ROOT'] . '/config/cache.php';
         
-        $this->cacheDir = __DIR__ . '/../../../' . $this->configCache['file']['path'];
+        $this->cacheDir = $_SERVER['DOCUMENT_ROOT'] . $this->configCache['file']['path'];
 
         if (!is_dir($this->cacheDir)) {
             mkdir($this->cacheDir, 0777, true);

@@ -18,7 +18,7 @@ class RedisCache implements ICache
             'port' => Env::get('REDIS_PORT'),
             'password' => Env::get('REDIS_PASSWORD')
         ]);
-        $this->configCache = require __DIR__ . '/../../../config/cache.php';
+        $this->configCache = require $_SERVER['DOCUMENT_ROOT'] . '/config/cache.php';
     }
 
     public function set($key, $value, $expiration = null) 

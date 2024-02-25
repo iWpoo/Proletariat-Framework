@@ -11,7 +11,7 @@ class Cache
 
     public static function init()
     {
-        $cacheConfig = require __DIR__ . '/../../config/cache.php';
+        $cacheConfig = require $_SERVER['DOCUMENT_ROOT'] . '/config/cache.php';
         switch ($cacheConfig['driver']) {
             case 'file': 
                 self::$cache = new FileCache();

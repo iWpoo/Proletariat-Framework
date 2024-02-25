@@ -67,7 +67,7 @@ input {
 </head>
 <body>
     <div class="container">
-        <form action="process_registration.php" method="post">
+        <form action="{{ route('store') }}" method="post">
             <h2 class="wildberries-title">Регистрация</h2>
             <label for="name">Имя:</label>
             <input type="text" id="name" name="name" required>

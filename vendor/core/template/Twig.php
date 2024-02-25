@@ -37,6 +37,6 @@ class Twig implements iTemplate
 
     private function initFunctions(): void
     {
-        self::$twig->addFunction(new TwigFunction('route', ['\Core\Route', 'route']));
+        self::$twig->addFunction(new TwigFunction('route', ['\Proletariat\Route', 'route']));
     }
 }

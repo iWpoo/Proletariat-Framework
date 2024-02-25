@@ -40,8 +40,8 @@ class Config
 
     private static function getCacheConfig($config)
     {
-        $configCache = require __DIR__ . '/../../config/cache.php';
-        $cacheDir = __DIR__ . '/../../' . $configCache['file']['config']['path'];
+        $configCache = require $_SERVER['DOCUMENT_ROOT'] . '/config/cache.php';
+        $cacheDir = $_SERVER['DOCUMENT_ROOT'] . $configCache['file']['config']['path'];
         $file = $cacheDir . $configCache['file']['config']['name'] . '.php';
     
         if (file_exists($file)) {
@@ -57,9 +57,9 @@ class Config
 
     private static function setCacheConfig($key, $value)
     {
-        $configCache = require __DIR__ . '/../../config/cache.php';
+        $configCache = require $_SERVER['DOCUMENT_ROOT'] . '/config/cache.php';
         
-        $cacheDir = __DIR__ . '/../../' . $configCache['file']['config']['path'];
+        $cacheDir = $_SERVER['DOCUMENT_ROOT'] . $configCache['file']['config']['path'];
     
         $expiration = $configCache['file']['config']['expire'];
             
