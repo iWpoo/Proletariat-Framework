@@ -1,2 +1,2 @@
-# My self-written Proletariat-Framework=)
+# Proletariat-Framework=)
 **Still in development**
