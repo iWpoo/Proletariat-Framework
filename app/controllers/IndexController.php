@@ -17,19 +17,16 @@ class IndexController extends Controller
 
 	public function index()
     {        
-        // $users = User::all();
-        // return $users;
-        return route('about');
         
     }
 
     public function about()
     {
-        return 'Hello World';
+        return 'About';
     }
 
     public function store()
     {
-        return route('index');
+        return redirect()->route('index');
     }
 }

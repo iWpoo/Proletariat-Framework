@@ -1,8 +1,8 @@
 <?php 
 
-namespace Proletariat\Services;
+namespace Proletariat\Database;
 
-use Proletariat\Interfaces\iDatabase;
+use Proletariat\Database\iDatabase;
 use Illuminate\Database\Capsule\Manager as Capsule;
 
 class Eloquent implements iDatabase

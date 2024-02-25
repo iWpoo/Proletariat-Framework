@@ -1,6 +1,6 @@
 <?php
 
-namespace Proletariat;
+namespace Proletariat\Support;
 
 class Config
 {

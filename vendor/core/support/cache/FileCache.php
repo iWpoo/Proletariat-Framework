@@ -1,8 +1,8 @@
 <?php
 
-namespace Proletariat\Services;
+namespace Proletariat\Support\Cache;
 
-use Proletariat\Interfaces\iCache;
+use Proletariat\Support\Cache\iCache;
 
 class FileCache implements ICache
 {

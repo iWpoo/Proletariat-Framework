@@ -2,7 +2,7 @@
     "name": "dio/dio",
     "description": "---",
     "autoload": {
-        "files": ["public/functions/functions.php"],
+        "files": ["vendor/core/helpers.php"],
         "psr-4": {
             "App\\": "app",
             "Proletariat\\": "vendor/core"

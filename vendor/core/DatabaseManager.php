@@ -2,7 +2,7 @@
 
 namespace Proletariat;
 
-use Proletariat\Interfaces\iDatabase;
+use Proletariat\Database\iDatabase;
 
 class DatabaseManager
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Proletariat\Interfaces;
+namespace Proletariat\Database;
 
 interface iDatabase
 {

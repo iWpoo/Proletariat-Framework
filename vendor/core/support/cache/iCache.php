@@ -1,6 +1,6 @@
 <?php
 
-namespace Proletariat\Interfaces;
+namespace Proletariat\Support\Cache;
 
 interface iCache
 {

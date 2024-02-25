@@ -2,7 +2,7 @@
 
 namespace Proletariat;
 
-use Proletariat\Services\Twig;
+use Proletariat\Template\Twig;
 
 abstract class Controller
 {

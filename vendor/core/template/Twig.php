@@ -1,17 +1,17 @@
 <?php
 
-namespace Proletariat\Services;
+namespace Proletariat\Template;
 
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 use Twig\TwigFunction;
 
-class Twig
+class Twig implements iTemplate
 {
     private static $instance;
     protected static $twig;
 
-    public static function getInstance()
+    public static function getInstance() 
     {
         if (!self::$instance) {
             self::$instance = new self();

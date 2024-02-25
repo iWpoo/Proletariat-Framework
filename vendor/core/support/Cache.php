@@ -1,9 +1,9 @@
 <?php
 
-namespace Proletariat;
+namespace Proletariat\Support;
 
-use Proletariat\Services\FileCache;
-use Proletariat\Services\RedisCache;
+use Proletariat\Support\Cache\FileCache;
+use Proletariat\Support\Cache\RedisCache;
 
 class Cache 
 {
@@ -24,7 +24,7 @@ class Cache
         }
     }
 
-    public static function set($key, $value, $expiration = null) 
+    public static function set($key, $value, $expiration = null)
     {
         self::init();
         self::$cache->set($key, $value, $expiration);
@@ -42,9 +42,14 @@ class Cache
         self::$cache->delete($key);
     }
 
-    public function exists($key)
+    public static function exists($key)
     {
         self::init();
         self::$cache->exists($key);
+    }
+
+    public static function getCacheObject(): self
+    {
+        return new self();
     }
 }

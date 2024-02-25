@@ -1,10 +1,10 @@
 <?php
 
-namespace Proletariat\Services;
+namespace Proletariat\Support\Cache;
 
-use Proletariat\Interfaces\iCache;
+use Proletariat\Support\Cache\iCache;
 use Predis\Client;
-use Proletariat\Env;
+use Proletariat\Support\Env;
 
 class RedisCache implements ICache
 {

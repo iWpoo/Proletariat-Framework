@@ -12,7 +12,7 @@ ini_set('display_errors', 'on');
 try {
     // Initialize the database
     $databaseConfig = require_once(__DIR__ . '/config/database.php');
-    $database = DatabaseManager::getInstance(new \Proletariat\Services\Eloquent)->initializeDatabase($databaseConfig);
+    $database = DatabaseManager::getInstance(new \Proletariat\Database\Eloquent)->initializeDatabase($databaseConfig);
 
     // Initialize the dependency container
     $container = AppContainer::buildContainer();
